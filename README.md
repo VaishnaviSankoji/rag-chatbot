@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 \# RAG Chatbot
 
 
@@ -70,3 +71,7 @@ ollama serve
 
 3\. LLaMA reads the chunks and generates an answer with sources
 
+=======
+# rag-chatbot
+AI-powered document Q&amp;A chatbot using RAG architecture.  Upload any PDF and ask questions — powered by LLaMA 3.1,  LangChain, ChromaDB, FastAPI and React.
+>>>>>>> e5bfda14112cf7e69357152074d54694ca89dcf4
