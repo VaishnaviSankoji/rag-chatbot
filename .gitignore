@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+.env
+backend/chroma_db/
+backend/docs/
+frontend/node_modules/
+frontend/build/
+*.egg-info/
+.DS_Store
+fix.py
+fix_app.py
