@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API = process.env.REACT_APP_API_URL || "http://localhost:8000";
+const API = process.env.NODE_ENV === "production" ? "/api" : "http://localhost:8000";
 
 export default function App() {
   const [messages, setMessages] = useState([
