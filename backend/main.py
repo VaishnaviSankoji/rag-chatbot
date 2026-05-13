@@ -13,7 +13,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
 os.makedirs("docs", exist_ok=True)
 
 @app.get("/")
