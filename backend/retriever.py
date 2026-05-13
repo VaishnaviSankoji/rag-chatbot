@@ -11,7 +11,7 @@ def ask_question(query: str):
     db = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
     retriever = db.as_retriever(search_kwargs={"k": 3})
     llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
+        model="gemini-2.0-flash",
         google_api_key=os.environ.get("GOOGLE_API_KEY")
     )
     prompt = PromptTemplate.from_template(
