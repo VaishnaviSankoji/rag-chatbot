@@ -1,4 +1,5 @@
-﻿from fastapi import FastAPI, UploadFile
+﻿from fastapi import FastAPI, UploadFile, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from ingest import ingest_pdf
 from retriever import ask_question
@@ -7,17 +8,27 @@ import os
 
 app = FastAPI()
 
-origins = ["*"]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 os.makedirs("docs", exist_ok=True)
+
+@app.options("/{rest_of_path:path}")
+async def preflight_handler(request: Request, rest_of_path: str):
+    return JSONResponse(
+        content={},
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+            "Access-Control-Allow-Headers": "*",
+        }
+    )
 
 @app.get("/")
 def root():
@@ -34,4 +45,7 @@ async def upload(file: UploadFile):
 @app.post("/ask")
 async def ask(data: dict):
     question = data.get("question", "")
-    return ask_question(question)
+    result = ask_question(question)
+    response = JSONResponse(content=result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
