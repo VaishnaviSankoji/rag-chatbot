@@ -1,7 +1,6 @@
 import os
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -10,10 +9,19 @@ def ask_question(query: str):
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     db = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
     retriever = db.as_retriever(search_kwargs={"k": 3})
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
-        google_api_key=os.environ.get("GOOGLE_API_KEY")
-    )
+
+    google_key = os.environ.get("GOOGLE_API_KEY")
+
+    if google_key:
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-2.0-flash",
+            google_api_key=google_key
+        )
+    else:
+        from langchain_ollama import OllamaLLM
+        llm = OllamaLLM(model="llama3.1", num_gpu=0)
+
     prompt = PromptTemplate.from_template(
         "Use the context below to answer the question.\nContext: {context}\nQuestion: {question}\nAnswer:"
     )
